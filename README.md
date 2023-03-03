@@ -6,9 +6,14 @@ launch automated web tests in parallel with Docker.
 
 ### Start the services
 
+In directory  `bin` Execute permition execution on script.
+```sh
+sudo chmod a+x build_and_up.sh
+```
+
 Run next in the current directory where `bin` file is present.
 ```sh
-build_and_up.sh
+./build_and_up.sh
 ```
 
 To view runned session open browser and follow to the link [http://localhost:8080](http://localhost:8080)
