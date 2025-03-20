@@ -1,61 +1,48 @@
-version: '3.9'
+version: '4.0'
+
 services:
-    selenoid-ui:
-      image: aerokube/selenoid-ui:1.10.9
-      hostname: "selenoid-ui"
-      container_name: "selenoid-ui"
-      networks:
-          selenoid:
-              aliases:
-                  - selenoid
-      ports:
-          - "8080:8080"
-      dns: 8.8.8.8
-      logging:
-          driver: "json-file"
-          options:
-              max-size: "10m"
-              max-file: "3"
-      command:
-          [
-              "--selenoid-uri",
-              "http://selenoid:4444",
-              "--allowed-origin",
-              "*"
-          ]
-      environment:
-          TZ: "America/Sao_Paulo"
-    selenoid:
-        image: aerokube/selenoid:1.10.9
-        hostname: "selenoid"
-        container_name: "selenoid"
-        networks:
-          selenoid:
-            aliases:
-              - selenoid
-        dns: 8.8.8.8
-        ports:
-          - "4444:4444"
-        volumes:
-          - "./browsers/browsers.json:/etc/selenoid/browsers.json"
-          - "/var/run/docker.sock:/var/run/docker.sock"
-          - "./video:/opt/selenoid/video"
-        environment:
-          OVERRIDE_VIDEO_OUTPUT_DIR: "${PWD}/docker/selenoid/video"
-          TZ: "America/Sao_Paulo"
-        command:
-          [
-            "-conf",
-            "/etc/selenoid/browsers.json",
-            "-container-network",
-            "selenoid"
-          ]
-        logging:
-          driver: "json-file"
-          options:
-            max-size: "10m"
-            max-file: "3"
+
+  selenoid-ui:
+    image: aerokube/selenoid-ui:1.10.11
+    container_name: selenoid-ui
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: "America/Sao_Paulo"
+    dns: 8.8.8.8
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command: >
+      --selenoid-uri http://selenoid:4444 --allowed-origin *
+    networks:
+      - selenoid
+
+  selenoid:
+    image: aerokube/selenoid:1.11.3
+    container_name: selenoid
+    ports:
+      - "4444:4444"
+    volumes:
+      - "./browsers/browsers.json:/etc/selenoid/browsers.json"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      TZ: "America/Sao_Paulo"
+    dns: 8.8.8.8
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command: >
+      -conf /etc/selenoid/browsers.json 
+      -container-network selenoid 
+      -limit 10
+    networks:
+      - selenoid
+
 networks:
-    selenoid:
-        name: selenoid
-        external: true
+  selenoid:
+    external: true
