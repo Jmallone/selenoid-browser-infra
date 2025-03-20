@@ -49,7 +49,7 @@ docker pull selenoid/firefox:latest
 docker pull selenoid/video-recorder:latest-release
 
 echo -e "${YELLOW}Starting infrastructure via docker-compose...${RESET}"
-if ! docker-compose up -d --force-recreate --build --remove-orphans; then
+if ! docker compose up -d --force-recreate --build --remove-orphans; then
     echo -e "${RED}ERROR: Failed to start infrastructure.${RESET}"
     exit 1
 fi
