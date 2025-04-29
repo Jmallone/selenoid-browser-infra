@@ -23,8 +23,10 @@ services:
     image: aerokube/selenoid:1.11.3
     ports:
       - "4444:4444"
+    configs:
+      - source: browsers-json
+        target: /etc/selenoid/browsers.json
     volumes:
-      - "./browsers/browsers.json:/etc/selenoid/browsers.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
       TZ: "America/Sao_Paulo"
@@ -41,6 +43,10 @@ services:
       -limit 10
     networks:
       - captain-overlay-network
+
+configs:
+  browsers-json:
+    external: true
 
 networks:
   captain-overlay-network:
